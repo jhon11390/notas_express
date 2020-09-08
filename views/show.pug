@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  a(href="/") Volver inicio
+  h1= currentNote.title
+  p= currentNote.body
+
+  a(href="#", class="eliminar") Eliminar
+
+  script. 
+    const borrar = document.querySelector(".eliminar");
+    borrar.addEventListener("click", function(e) {
+      e.preventDefault();
+
+      if (confirm("Confirme para borrar")) {
+        fetch("/notes/#{currentNote._id}", {
+          method: "DELETE"
+        }).then(response => {
+          window.location= "/";
+        });
+      }
+    });

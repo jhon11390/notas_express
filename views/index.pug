@@ -1,4 +1,10 @@
 extends layout
 
 block content
-    h1 index
+    a(href="/notes/new") nueva nota
+    each note in notes
+        h1
+            a(href="/notes/"+note._id)= note.title
+        p= note.body
+        h4
+            a(href="/notes/"+note._id+"/edit") Editar

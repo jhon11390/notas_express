@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  a(href="/") Ir a inicio
+  form(action="/notes", method="post")
+    div
+      label(for="title") Titulo
+      input(type="text", name="title", id="title")
+
+    div
+      label(for="body") Descripcion
+      textarea(name="body", id="body") 
+
+    button(type="submit") submit
