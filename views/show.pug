@@ -3,7 +3,7 @@ extends layout
 block content
   a(href="/") Volver inicio
   h1= currentNote.title
-  p= currentNote.body
+  p !{md(currentNote.body || "")}
 
   a(href="#", class="eliminar") Eliminar
 

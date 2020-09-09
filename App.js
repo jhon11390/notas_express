@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Note = require('./models/Note');
-const { get } = require('mongoose');
+const md = require('marked');
 const app = express();
 
 mongoose.connect("mongodb://localhost:27017/notes", {useNewUrlParser: true, useUnifiedTopology: true})
@@ -22,7 +22,7 @@ app.get('/notes/new', (req, res) => {
 
 app.get("/notes/:id", async (req, res) => {
     const note = await Note.findById(req.params.id);
-    res.render('show', {currentNote: note});
+    res.render('show', {currentNote: note, md: md});
 })
 
 app.get("/notes/:id/edit", async (req, res, next) => {
