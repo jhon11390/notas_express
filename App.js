@@ -37,11 +37,11 @@ app.set('view engine', 'pug');
 app.set('views', 'views');
 
 app.get('/', requireUser, async (req, res) => {
-    const notes = await Note.find()
+    const notes = await Note.find({user: res.locals.user})
     res.render('index', {notes})
 });
 
-app.get('/notes/new', (req, res) => {
+app.get('/notes/new', requireUser, (req, res) => {
     res.render('new')
 })
 
@@ -50,7 +50,7 @@ app.get("/notes/:id", requireUser, async (req, res) => {
     res.render('show', {currentNote: note, md: md});
 })
 
-app.get("/notes/:id/edit", async (req, res, next) => {
+app.get("/notes/:id/edit", requireUser, async (req, res, next) => {
     try{
         const note = await Note.findById(req.params.id);
         res.render('edit', {currentNote: note})
@@ -62,7 +62,8 @@ app.get("/notes/:id/edit", async (req, res, next) => {
 app.post("/notes", async (req, res, next) => {
     const data = {
         title: req.body.title,
-        body: req.body.body
+        body: req.body.body,
+        user: res.locals.user
     };
     try {
         const note = new Note(data);
@@ -73,7 +74,7 @@ app.post("/notes", async (req, res, next) => {
     res.redirect("/")
 })
 
-app.delete("/notes/:id", async (req, res, next) => {
+app.delete("/notes/:id", requireUser, async (req, res, next) => {
     try{
         await Note.deleteOne({_id: req.params.id});
         res.status(204).send({});
@@ -82,7 +83,7 @@ app.delete("/notes/:id", async (req, res, next) => {
     }
 })
 
-app.patch("/notes/:id", async (req, res, next) => {
+app.patch("/notes/:id", requireUser,async (req, res, next) => {
     const id = req.params.id;
     const note =  await Note.findById(id);
     note.title = req.body.title;
@@ -131,7 +132,7 @@ app.post("/login", async (req, res, next) => {
     }
 })
 
-app.get("/logout", (req, res) => {
+app.get("/logout", requireUser, (req, res) => {
     req.session = null
     res.clearCookie("session");
     res.clearCookie("session.sig");
