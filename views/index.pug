@@ -1,7 +1,11 @@
 extends layout
 
 block content
+    br
+    a(href="/logout") salir
+    hr
     a(href="/notes/new") nueva nota
+    hr
     each note in notes
         h1
             a(href="/notes/"+note._id)= note.title
